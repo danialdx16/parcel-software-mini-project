@@ -3,8 +3,11 @@ from tkinter import ttk
 
 root = Tk()
 root.title('UNIMAP PARCEL SYSTEM')
-#Change this path location for parcel system
-icon_location = 'D:/ASSIGNMENTS/1. UNIMAP (RY87)/SEM 2/VGT123/Mini Project/Parcel software/parcel-software-mini-project/imej/icon-unimap.ico'
+
+#list your path location below for using parcel system icon (Please '#' other user path location when using your own path)
+#icon_location = 'C:/Users/User/Desktop/UNIMAP Class/Sem 2/VGT123/Gui Hub/Example/parcel-software-mini-project/imej/icon-unimap.ico' #PC Wan
+icon_location = 'D:/ASSIGNMENTS/1. UNIMAP (RY87)/SEM 2/VGT123/Mini Project/Parcel software/parcel-software-mini-project/imej/icon-unimap.ico' #PC Danial
+
 root.iconbitmap(icon_location)
 root.resizable(False, False)
 
