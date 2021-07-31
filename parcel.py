@@ -7,9 +7,9 @@ root.title('UNIMAP PARCEL SYSTEM')
 
 #list your path location below for using parcel system icon (Please '#' other user path location when using your own path)
 #icon_location = 'C:/Users/User/Desktop/UNIMAP Class/Sem 2/VGT123/Gui Hub/Example/parcel-software-mini-project/imej/icon-unimap.ico' #PC Wan
-#icon_location = 'D:\SEM 2\VGT123\computer programming\parcel-software-mini-project\imej' PC winfei
+#icon_location = 'D:/SEM 2/VGT123/computer programming/parcel-software-mini-project/imej/Icon-unimap.ico' #PC winfei
 icon_location = 'D:/ASSIGNMENTS/1. UNIMAP (RY87)/SEM 2/VGT123/Mini Project/Parcel software/parcel-software-mini-project/imej/icon-unimap.ico' #PC Danial
-
+icon_location = 'C:/Users/Akmal Nazim/Desktop/Mini Project VGT123/GitHub/parcel-software-mini-project/imej/Icon-unimap.ico' #PC Akmal
 root.iconbitmap(icon_location)
 root.resizable(False, False)
 
@@ -32,6 +32,34 @@ def submit():
     rack_no.delete(0, END)
     date.delete(0, END)
     
+    con.commit()
+    con.close()
+
+#show DISPLAY
+def display():
+    display = Tk()
+    display.title('Records')
+    display.iconbitmap('icon_location')
+    #display.geometry('400x400')
+
+    con = sqlite3.connect(f'parcel_system_{month.get()}.db')
+    c = con.cursor()
+    c.execute("SELECT*, oid FROM parcel_system")
+    records = c.fetchall()
+    print(records)
+    
+    current_count = 1
+    Label(display, text = 'Name').grid(row = 0, column = 0, padx = (0, 10))
+    Label(display, text = 'Phone No.').grid(row = 0, column = 1, padx = (0, 10))
+    Label(display, text = 'Tracking No.').grid(row = 0, column = 2, padx = (0, 10))
+    Label(display, text = 'Rack No.').grid(row = 0, column = 3, padx = (0, 10))
+    Label(display, text = 'Date').grid(row = 0, column = 4, padx = (0, 10))
+    Label(display, text = 'Status').grid(row = 0, column = 5, padx = (0, 10))
+
+    for record in records:
+        for x in range(6):
+            Label(display, text = record[x]).grid(row = current_count, column = x)
+        current_count += 1
     con.commit()
     con.close()
 
