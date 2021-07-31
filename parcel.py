@@ -14,7 +14,7 @@ root.resizable(False, False)
 
 #submit data function
 def submit():
-    con = sqlite3.connect('parcel_system.db')
+    con = sqlite3.connect(f'parcel_system_{month.get()}.db')
     c = con.cursor()
     c.execute("INSERT INTO parcel_system VALUES (:name, :phone, :trackno, :rack, :date, :status)",
             {
@@ -30,7 +30,7 @@ def submit():
     parcel_serial.delete(0, END)
     rack_no.delete(0, END)
     date.delete(0, END)
-
+    
     con.commit()
     con.close()
 
