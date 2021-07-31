@@ -21,8 +21,8 @@ for x in range(len(month)):
     
     c.execute("""CREATE TABLE parcel_system(
         name text, 
-        phone integer,
-        trackno integer,
+        phone string,
+        trackno string,
         rack integer,
         date integer,
         status
