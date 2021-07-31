@@ -40,7 +40,7 @@ date.grid(row = 4, column = 1, sticky = W, pady = 10)
 select_box = Entry(root)
 select_box.grid(row=1, column=3, sticky = E, pady = 10)
 
-#Select box status
+#Select combo box status
 status = ttk.Combobox(root, value=["Select Status", "Pickup", "Onhold"])
 status.current(0)
 status.grid(row = 5, column= 1)
@@ -69,7 +69,7 @@ update_button.grid(row=2, column=4, pady=10, padx=10, ipadx=30)
 delete_button = Button(root, text="Delete")
 delete_button.grid(row=3, column=4, pady=10, padx=10, ipadx=30)
 
-#Select box month
+#Select combo box month
 month = ttk.Combobox(root, value=["Select Month", 'Jan', 'Feb', 'Mac', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Spt', 'Oct', 'Nov', 'Dec'])
 month.current(0)
 month.grid(row = 4, column= 4)
