@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+import sqlite3
 
 root = Tk()
 root.title('UNIMAP PARCEL SYSTEM')
@@ -11,6 +12,27 @@ icon_location = 'D:/ASSIGNMENTS/1. UNIMAP (RY87)/SEM 2/VGT123/Mini Project/Parce
 root.iconbitmap(icon_location)
 root.resizable(False, False)
 
+#submit data function
+def submit():
+    con = sqlite3.connect('parcel_system.db')
+    c = con.cursor()
+    c.execute("INSERT INTO parcel_system VALUES (:name, :phone, :trackno, :rack, :date, :status)",
+            {
+                'name' : name_id.get().upper(),
+                'phone' : parcel_no.get(),
+                'trackno' : parcel_serial.get().upper(),  
+                'rack' : rack_no.get(),
+                'date': date.get(),
+                'status': status.get()
+            })
+    name_id.delete(0, END)
+    parcel_no.delete(0, END)
+    parcel_serial.delete(0, END)
+    rack_no.delete(0, END)
+    date.delete(0, END)
+
+    con.commit()
+    con.close()
 
 #frame 1 layout
 #label
