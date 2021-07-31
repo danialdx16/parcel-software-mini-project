@@ -100,7 +100,7 @@ status.current(0)
 status.grid(row = 5, column= 1)
 
 #submit button
-submitbutton=Button(root, text = "CONFIRM")
+submitbutton=Button(root, text = "CONFIRM", command=submit)
 submitbutton.grid(row = 5, column = 3, pady = 5, padx = 5)
 
 #cancel button
@@ -108,7 +108,7 @@ cancelbutton=Button(root, text = "CANCEL", command=root.quit)
 cancelbutton.grid(row = 5, column = 4, pady = 5, padx = 5)
 
 #display button
-history_button = Button(root, text="View all")
+history_button = Button(root, text="View all", command=display)
 history_button.grid(row=0, column=4, pady=10, padx=10, ipadx=30)
 
 #Search button
