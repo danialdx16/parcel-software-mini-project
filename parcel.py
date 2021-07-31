@@ -4,7 +4,7 @@ from tkinter import ttk
 root = Tk()
 root.title('UNIMAP PARCEL SYSTEM')
 #Change this path location for parcel system
-icon_location = 'D:\ASSIGNMENTS\1. UNIMAP (RY87)\SEM 2\VGT123\Mini Project\Parcel software\parcel-software-mini-project\imej'
+icon_location = 'D:/ASSIGNMENTS/1. UNIMAP (RY87)/SEM 2/VGT123/Mini Project/Parcel software/parcel-software-mini-project/imej/icon-unimap.ico'
 root.iconbitmap(icon_location)
 root.resizable(False, False)
 
