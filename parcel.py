@@ -31,7 +31,8 @@ def submit():
     parcel_serial.delete(0, END)
     rack_no.delete(0, END)
     date.delete(0, END)
-    
+    messagebox.showinfo('SUCCESS!', "Data submitted")
+
     con.commit()
     con.close()
 
