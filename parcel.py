@@ -6,9 +6,9 @@ root = Tk()
 root.title('UNIMAP PARCEL SYSTEM')
 
 #list your path location below for using parcel system icon (Please '#' other user path location when using your own path)
-icon_location = 'C:/Users/User/Desktop/UNIMAP Class/Sem 2/VGT123/Gui Hub/Example/parcel-software-mini-project/imej/icon-unimap.ico' #PC Wan
+#icon_location = 'C:/Users/User/Desktop/UNIMAP Class/Sem 2/VGT123/Gui Hub/Example/parcel-software-mini-project/imej/icon-unimap.ico' #PC Wan
 #icon_location = 'D:/SEM 2/VGT123/computer programming/parcel-software-mini-project/imej/Icon-unimap.ico' #PC winfei
-#icon_location = 'D:/ASSIGNMENTS/1. UNIMAP (RY87)/SEM 2/VGT123/Mini Project/Parcel software/parcel-software-mini-project/imej/icon-unimap.ico' #PC Danial
+icon_location = 'D:/ASSIGNMENTS/1. UNIMAP (RY87)/SEM 2/VGT123/Mini Project/Parcel software/parcel-software-mini-project/imej/icon-unimap.ico' #PC Danial
 #icon_location = 'C:/Users/Akmal Nazim/Desktop/Mini Project VGT123/GitHub/parcel-software-mini-project/imej/Icon-unimap.ico' #PC Akmal
 root.iconbitmap(icon_location)
 root.resizable(False, False)
@@ -39,7 +39,7 @@ def submit():
 def display():
     display = Tk()
     display.title('Records')
-    display.iconbitmap('icon_location')
+    display.iconbitmap(icon_location)
     
 
     con = sqlite3.connect(f'parcel_system_{month.get()}.db')
