@@ -1,5 +1,6 @@
 import sqlite3
 
+
 month = [
         'Jan',
         'Feb',
@@ -29,4 +30,4 @@ for x in range(len(month)):
         )""")
 
     con.commit()
-    con.close() 
+    con.close()
