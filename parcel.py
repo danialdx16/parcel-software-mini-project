@@ -114,38 +114,6 @@ def update_data():
     record_status = select_box.get().upper()
     c.execute("SELECT* FROM parcel_system WHERE trackno=" + f"'{record_status}'")
     records = c.fetchall()
-
-#update data function
-def confirm_update ():
-    msgBox = messagebox.askquestion('Confirmation', 'CONFIRM UPDATE?', icon = 'warning')
-    if msgBox == 'yes':
-        update()
-
-def update():
-    con = sqlite3.connect(f'parcel_system_{month.get()}.db')
-    c = con.cursor()
-
-    record_status = select_box.get().upper()
-
-    c.execute("""UPDATE parcel_system SET 
-        name = :name, 
-        phone = :phone, 
-        trackno = :trackno,
-        rack = :rack,
-        date = :date,
-        status = :status
-
-        WHERE trackno = """ + f"'{record_status}'",
-        {
-        'name':name_id_editor.get().upper(),
-        'phone':parcel_no_editor.get(),
-        'trackno':parcel_serial_editor.get().upper(),
-        'rack' :rack_no_editor.get(),
-        'date' :date_editor.get(),
-        'status':status_editor.get()
-        })
-    con.commit()
-    con.close()
     
     #Global Variable
     global name_id_editor
@@ -200,12 +168,42 @@ def update():
                 status_editor.insert(0, record[5])
             
             #update button
-            update_button_editor = Button(editor, text="Update Data")
+            update_button_editor = Button(editor, text="Update Data", command = confirm_update)
             update_button_editor.grid(row=5, column=2, columnspan = 4,pady=10, padx=10, ipadx=50)
 
     if error == 0:
         data_notfound()
 
+def confirm_update ():
+    msgBox = messagebox.askquestion('Confirmation', 'CONFIRM UPDATE?', icon = 'warning')
+    if msgBox == 'yes':
+        update()
+
+def update():
+    con = sqlite3.connect(f'parcel_system_{month.get()}.db')
+    c = con.cursor()
+
+    record_status = select_box.get().upper()
+
+    c.execute("""UPDATE parcel_system SET 
+        name = :name, 
+        phone = :phone, 
+        trackno = :trackno,
+        rack = :rack,
+        date = :date,
+        status = :status
+
+        WHERE trackno = """ + f"'{record_status}'",
+        {
+        'name':name_id_editor.get().upper(),
+        'phone':parcel_no_editor.get(),
+        'trackno':parcel_serial_editor.get().upper(),
+        'rack' :rack_no_editor.get(),
+        'date' :date_editor.get(),
+        'status':status_editor.get()
+        })
+    con.commit()
+    con.close()
 
 # data not found pop up
 def data_notfound():
