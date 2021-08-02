@@ -144,8 +144,36 @@ def update_data():
             label_7 =Label(editor, text = "Status:")
             label_7.grid(row = 5, column = 0, sticky = W, pady = 10, padx = 5)
 
+            #entry
+            name_id_editor =Entry(editor)
+            name_id_editor.grid(row = 0, column = 1, sticky = W, pady = 10)
+            parcel_no_editor =Entry(editor)
+            parcel_no_editor.grid(row = 1, column = 1, sticky = W, pady = 10)
+            parcel_serial_editor =Entry(editor)
+            parcel_serial_editor.grid(row = 2, column = 1, sticky = W, pady = 10)
+            rack_no_editor = Entry(editor)
+            rack_no_editor.grid(row = 3, column = 1, sticky = W, pady = 10)
+            date_editor = Entry(editor)
+            date_editor.grid(row = 4, column = 1, sticky = W, pady = 10)
+            status_editor = ttk.Combobox(editor, value=["", "Pickup", "Onhold"])
+            status_editor.current(0)
+            status_editor.grid(row = 5, column= 1)
+            
+            for record in records:
+                name_id_editor.insert(0, record[0])
+                parcel_no_editor.insert(0, record[1])
+                parcel_serial_editor.insert(0, record[2])
+                rack_no_editor.insert(0, record[3])
+                date_editor.insert(0, record[4])
+                status_editor.insert(0, record[5])
+            
+            #update button
+            update_button_editor = Button(editor, text="Update Data")
+            update_button_editor.grid(row=5, column=2, columnspan = 4,pady=10, padx=10, ipadx=50)
+
     if error == 0:
         data_notfound()
+
 
 # data not found pop up
 def data_notfound():
