@@ -65,6 +65,48 @@ def display():
     con.commit()
     con.close()
 
+#update data function
+def update_data():   
+    #editor.geometry('400x400')
+
+    con = sqlite3.connect(f'parcel_system_{month.get()}.db')
+    c = con.cursor()
+    record_status = select_box.get().upper()
+    c.execute("SELECT* FROM parcel_system WHERE trackno=" + f"'{record_status}'")
+    records = c.fetchall()
+    
+    #Global Variable
+    global name_id_editor
+    global parcel_no_editor
+    global parcel_serial_editor
+    global rack_no_editor
+    global date_editor
+    global status_editor
+
+    error = 0
+
+    for record in records:
+        if record[2] == record_status:
+            error = 1
+            editor = Tk()
+            editor.title('Editor')
+            editor.iconbitmap(icon_location)
+            label_1 =Label(editor, text = "Name:")
+            label_1.grid(row = 0, column = 0, sticky = W, pady = 10, padx = 5)
+            label_2 =Label(editor, text = "Phone Number:")
+            label_2.grid(row = 1, column = 0, sticky = W, pady = 10, padx = 5)
+            label_3 =Label(editor, text = "Tracking Number:")
+            label_3.grid(row = 2, column = 0, sticky = W, pady = 10, padx = 5)
+            label_5 =Label(editor, text = "Rack Number:")
+            label_5.grid(row = 3, column = 0, sticky = W, pady = 10, padx = 5)
+            label_6 =Label(editor, text = "Date:")
+            label_6.grid(row = 4, column = 0, sticky = W, pady = 10, padx = 5)
+            label_7 =Label(editor, text = "Status:")
+            label_7.grid(row = 5, column = 0, sticky = W, pady = 10, padx = 5)
+
+    if error == 0:
+        data_notfound()
+
 #search Data
 def search_data():
     search = Tk()
