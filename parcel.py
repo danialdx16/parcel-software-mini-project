@@ -6,9 +6,9 @@ root = Tk()
 root.title('UNIMAP PARCEL SYSTEM')
 
 #list your path location below for using parcel system icon (Please '#' other user path location when using your own path)
-#icon_location = 'C:/Users/User/Desktop/UNIMAP Class/Sem 2/VGT123/Gui Hub/Example/parcel-software-mini-project/imej/icon-unimap.ico' #PC Wan
+icon_location = 'C:/Users/User/Desktop/UNIMAP Class/Sem 2/VGT123/Gui Hub/Example/parcel-software-mini-project/imej/icon-unimap.ico' #PC Wan
 #icon_location = 'D:/SEM 2/VGT123/computer programming/parcel-software-mini-project/imej/Icon-unimap.ico' #PC winfei
-icon_location = 'D:/ASSIGNMENTS/1. UNIMAP (RY87)/SEM 2/VGT123/Mini Project/Parcel software/parcel-software-mini-project/imej/icon-unimap.ico' #PC Danial
+#icon_location = 'D:/ASSIGNMENTS/1. UNIMAP (RY87)/SEM 2/VGT123/Mini Project/Parcel software/parcel-software-mini-project/imej/icon-unimap.ico' #PC Danial
 #icon_location = 'C:/Users/Akmal Nazim/Desktop/Mini Project VGT123/GitHub/parcel-software-mini-project/imej/Icon-unimap.ico' #PC Akmal
 root.iconbitmap(icon_location)
 root.resizable(False, False)
@@ -205,6 +205,32 @@ def update():
     con.commit()
     con.close()
 
+#delete data function 
+def delete_data():
+
+    con = sqlite3.connect(f'parcel_system_{month.get()}.db')
+    c = con.cursor()
+    record_status = select_box.get().upper()
+    c.execute("SELECT* FROM parcel_system WHERE trackno=" + f"'{record_status}'")
+    records = c.fetchall()
+
+    error = 0
+
+    for record in records:
+        if record[2] == record_status:
+            msgBox = messagebox.askquestion('Delete', 'Confirm Delete?', icon = 'warning')
+            if msgBox == 'yes':
+                error = 1
+                con = sqlite3.connect(f'parcel_system_{month.get()}.db')
+                c = con.cursor()
+                c.execute("DELETE from parcel_system WHERE trackno = " + f"'{record_status}'")
+                select_box.delete(0, END)
+                con.commit()
+                con.close()
+    
+    if error == 0:
+        data_notfound()
+
 # data not found pop up
 def data_notfound():
     messagebox.showinfo('Info', "Data Not Found")
@@ -223,6 +249,8 @@ def check_database(current_month, val):
             search_data()
         elif val == 4:
             update_data()
+        elif val == 5:
+            delete_data()
 
 #frame 1 layout
 #label
@@ -281,7 +309,7 @@ update_button = Button(root, text ="Update", command=lambda:check_database(month
 update_button.grid(row=2, column=4, pady=10, padx=10, ipadx=30)
 
 #Delete button
-delete_button = Button(root, text ="Delete")
+delete_button = Button(root, text ="Delete", command=lambda:check_database(month.get(), 5))
 delete_button.grid(row=3, column=4, pady=10, padx=10, ipadx=30)
 
 #Select combo box month
