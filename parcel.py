@@ -6,9 +6,9 @@ root = Tk()
 root.title('UNIMAP PARCEL SYSTEM')
 
 #list your path location below for using parcel system icon (Please '#' other user path location when using your own path)
-icon_location = 'C:/Users/User/Desktop/UNIMAP Class/Sem 2/VGT123/Gui Hub/Example/parcel-software-mini-project/imej/icon-unimap.ico' #PC Wan
+#icon_location = 'C:/Users/User/Desktop/UNIMAP Class/Sem 2/VGT123/Gui Hub/Example/parcel-software-mini-project/imej/icon-unimap.ico' #PC Wan
 #icon_location = 'D:/SEM 2/VGT123/computer programming/parcel-software-mini-project/imej/Icon-unimap.ico' #PC winfei
-#icon_location = 'D:/ASSIGNMENTS/1. UNIMAP (RY87)/SEM 2/VGT123/Mini Project/Parcel software/parcel-software-mini-project/imej/icon-unimap.ico' #PC Danial
+icon_location = 'D:/ASSIGNMENTS/1. UNIMAP (RY87)/SEM 2/VGT123/Mini Project/Parcel software/parcel-software-mini-project/imej/icon-unimap.ico' #PC Danial
 #icon_location = 'C:/Users/Akmal Nazim/Desktop/Mini Project VGT123/GitHub/parcel-software-mini-project/imej/Icon-unimap.ico' #PC Akmal
 root.iconbitmap(icon_location)
 root.resizable(False, False)
@@ -202,6 +202,7 @@ def update():
         'date' :date_editor.get(),
         'status':status_editor.get()
         })
+    messagebox.showinfo('Info', "The data has been updated")
     con.commit()
     con.close()
 
@@ -214,22 +215,35 @@ def delete_data():
     c.execute("SELECT* FROM parcel_system WHERE trackno=" + f"'{record_status}'")
     records = c.fetchall()
 
-    error = 0
+    delete = 0
 
     for record in records:
         if record[2] == record_status:
             msgBox = messagebox.askquestion('Delete', 'Confirm Delete?', icon = 'warning')
             if msgBox == 'yes':
-                error = 1
+                delete = 1
                 con = sqlite3.connect(f'parcel_system_{month.get()}.db')
                 c = con.cursor()
                 c.execute("DELETE from parcel_system WHERE trackno = " + f"'{record_status}'")
                 select_box.delete(0, END)
+                messagebox.showinfo('Info', "The data has been deleted")
                 con.commit()
                 con.close()
     
-    if error == 0:
-        data_notfound()
+    if delete == 0:
+        messagebox.showinfo('Info', "Delete has been canceled")
+
+#delete all data function 
+def delete_all_data():
+    response = messagebox.askyesno("DELETE ALL", "Are you sure to delete all the data? This operation cannot be undone", icon = 'warning')
+
+    if response == 1:
+        con = sqlite3.connect(f'parcel_system_{month.get()}.db')
+        c = con.cursor()
+        c.execute("DELETE from parcel_system")
+        messagebox.showinfo('Deleted', "All data has been deleted")
+        con.commit()
+        con.close()
 
 # data not found pop up
 def data_notfound():
@@ -251,6 +265,8 @@ def check_database(current_month, val):
             update_data()
         elif val == 5:
             delete_data()
+        elif val == 6:
+            delete_all_data()
 
 #frame 1 layout
 #label
@@ -298,23 +314,27 @@ cancelbutton.grid(row = 5, column = 4, pady = 5, padx = 5)
 
 #display button
 history_button = Button(root, text ="View all",  command=lambda:check_database(month.get(), 2))
-history_button.grid(row=0, column=4, pady=10, padx=10, ipadx=30)
+history_button.grid(row=0, column=4, pady=10, padx=10, ipadx=27)
 
 #Search button
 search_button = Button(root,  text ="Search", command=lambda:check_database(month.get(), 3))
-search_button.grid(row=1, column=4, pady=10, padx=10, ipadx=30)
+search_button.grid(row=1, column=4, pady=10, padx=10, ipadx=29.5)
 
 #update button
 update_button = Button(root, text ="Update", command=lambda:check_database(month.get(), 4))
-update_button.grid(row=2, column=4, pady=10, padx=10, ipadx=30)
+update_button.grid(row=2, column=4, pady=10, padx=10, ipadx=28)
 
 #Delete button
 delete_button = Button(root, text ="Delete", command=lambda:check_database(month.get(), 5))
 delete_button.grid(row=3, column=4, pady=10, padx=10, ipadx=30)
 
+#Delete All button
+delete_all_button = Button(root, text="Delete All", command=lambda:check_database(month.get(), 6))
+delete_all_button.grid(row=4, column=4, pady=10, padx=10, ipadx=22)
+
 #Select combo box month
 month = ttk.Combobox(root, value=["Select Month", 'Jan', 'Feb', 'Mac', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Spt', 'Oct', 'Nov', 'Dec'])
 month.current(0)
-month.grid(row = 4, column= 4)
+month.grid(row = 0, column= 3)
 
 root.mainloop()
