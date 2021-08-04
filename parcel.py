@@ -1,22 +1,38 @@
+#=================================================== import GUI and database library ====================================================
 from tkinter import *
 from tkinter import ttk, messagebox
 import sqlite3
+#========================================================================================================================================
 
+#Assign tk
 root = Tk()
+
+#Assign Window Title
 root.title('UNIMAP PARCEL SYSTEM')
 
-#list your path location below for using parcel system icon (Please '#' other user path location when using your own path)
+#============= list your path location below for using parcel system icon (Please '#' other user path location when using your own path) ===============
+
 #icon_location = 'C:/Users/User/Desktop/UNIMAP Class/Sem 2/VGT123/Gui Hub/Example/parcel-software-mini-project/imej/icon-unimap.ico' #PC Wan
 #icon_location = 'D:/SEM 2/VGT123/computer programming/parcel-software-mini-project/imej/Icon-unimap.ico' #PC winfei
 icon_location = 'D:/ASSIGNMENTS/1. UNIMAP (RY87)/SEM 2/VGT123/Mini Project/Parcel software/parcel-software-mini-project/imej/icon-unimap.ico' #PC Danial
 #icon_location = 'C:/Users/Akmal Nazim/Desktop/Mini Project VGT123/GitHub/parcel-software-mini-project/imej/Icon-unimap.ico' #PC Akmal
+
+#========================================================================================================================================================
+
+#icon for GUI
 root.iconbitmap(icon_location)
 root.resizable(False, False)
 
-#submit data function
+#========================================================================================================================================
+
+#===================================================== submit data function =============================================================
 def submit():
+
+    #connect database
     con = sqlite3.connect(f'parcel_system_{month.get()}.db')
     c = con.cursor()
+
+    #execute data
     c.execute("INSERT INTO parcel_system VALUES (:name, :phone, :trackno, :rack, :date, :status)",
             {
                 'name' : name_id.get().upper(),
@@ -26,30 +42,43 @@ def submit():
                 'date': date.get(),
                 'status': status.get()
             })
+    
+    #clear form after submit 
     name_id.delete(0, END)
     parcel_no.delete(0, END)
     parcel_serial.delete(0, END)
     rack_no.delete(0, END)
     date.delete(0, END)
+
+    #messagebox after submit data 
     messagebox.showinfo('SUCCESS!', "Data submitted")
 
+    #makes all changes and ends a transaction in parcel database
     con.commit()
-    con.close()
 
-#show DISPLAY
+    #close database
+    con.close()
+#========================================================================================================================================
+
+#===================================================== View all function ================================================================
 def display():
+
+    #Record window w/ Icon
     display = Tk()
     display.title('Records')
     display.iconbitmap(icon_location)
     
-
+    #connect database
     con = sqlite3.connect(f'parcel_system_{month.get()}.db')
     c = con.cursor()
     c.execute("SELECT*, oid FROM parcel_system")
+
+    #show record list
     records = c.fetchall()
     print(records)
     print(len(records))
     
+    #list record in table
     current_count = 1
     Label(display, text = 'Name').grid(row = 0, column = 0, padx = (0, 10))
     Label(display, text = 'Phone No.').grid(row = 0, column = 1, padx = (0, 10))
@@ -62,18 +91,27 @@ def display():
         for x in range(6):
             Label(display, text = record[x]).grid(row = current_count, column = x)
         current_count += 1
-    con.commit()
-    con.close()
 
-#search Data
+    #makes all changes and ends a transaction in parcel database
+    con.commit()
+
+    #close database
+    con.close()
+#========================================================================================================================================
+
+#==================================================== search Data function ==============================================================
 def search_data():
+
+    #Search window w/ Icon
     search = Tk()
     search.title('Search')
     search.iconbitmap(icon_location)
     
-
+    #connect database
     con = sqlite3.connect(f'parcel_system_{month.get()}.db')
     c = con.cursor()
+
+    #Search keyword using tracking no.
     record_status = select_box.get().upper()
     c.execute("SELECT* FROM parcel_system WHERE trackno=" + f"'{record_status}'")
     records = c.fetchall()
@@ -86,11 +124,12 @@ def search_data():
     global date_editor
     global status_editor
 
-    error = 0
+    response = 0
 
+    #for loop search data
     for record in records:
         if record[2] == record_status:
-            error = 1
+            response = 1
             Label(search, text = 'Name').grid(row = 0, column = 0, padx = (0, 10))
             Label(search, text = 'Phone No.').grid(row = 0, column = 1, padx = (0, 10))
             Label(search, text = 'Tracking No.').grid(row = 0, column = 2, padx = (0, 10))
@@ -102,15 +141,22 @@ def search_data():
                 for x in range(6):
                     Label(search, text = record[x]).grid(row = 1, column = x)
     
-    if error == 0:
+    #condition if no input in search box
+    if response == 0:
         search.destroy()
         data_notfound()
+#========================================================================================================================================
 
-#update data function
+#==================================================== update Data function ==============================================================
+
+#update form
 def update_data():   
     
+    #connect database
     con = sqlite3.connect(f'parcel_system_{month.get()}.db')
     c = con.cursor()
+
+    #Search keyword using tracking no.
     record_status = select_box.get().upper()
     c.execute("SELECT* FROM parcel_system WHERE trackno=" + f"'{record_status}'")
     records = c.fetchall()
@@ -123,14 +169,17 @@ def update_data():
     global date_editor
     global status_editor
 
-    error = 0
+    response = 0
 
+    #update form
     for record in records:
         if record[2] == record_status:
-            error = 1
+            response = 1
             editor = Tk()
             editor.title('Editor')
             editor.iconbitmap(icon_location)
+
+            #label
             label_1 =Label(editor, text = "Name:")
             label_1.grid(row = 0, column = 0, sticky = W, pady = 10, padx = 5)
             label_2 =Label(editor, text = "Phone Number:")
@@ -159,6 +208,7 @@ def update_data():
             status_editor.current(0)
             status_editor.grid(row = 5, column= 1)
             
+            #insert new data
             for record in records:
                 name_id_editor.insert(0, record[0])
                 parcel_no_editor.insert(0, record[1])
@@ -171,20 +221,27 @@ def update_data():
             update_button_editor = Button(editor, text="Update Data", command = confirm_update)
             update_button_editor.grid(row=5, column=2, columnspan = 4,pady=10, padx=10, ipadx=50)
 
-    if error == 0:
+    #condition if no input in search box
+    if response == 0:
         data_notfound()
 
+#confirm update
 def confirm_update ():
+
+    #messagebox for confirmation 
     msgBox = messagebox.askquestion('Confirmation', 'CONFIRM UPDATE?', icon = 'warning')
     if msgBox == 'yes':
         update()
 
+#update system
 def update():
+
+    #connect database
     con = sqlite3.connect(f'parcel_system_{month.get()}.db')
     c = con.cursor()
 
+    #execute new updated data
     record_status = select_box.get().upper()
-
     c.execute("""UPDATE parcel_system SET 
         name = :name, 
         phone = :phone, 
@@ -202,26 +259,39 @@ def update():
         'date' :date_editor.get(),
         'status':status_editor.get()
         })
-    messagebox.showinfo('Info', "The data has been updated")
-    con.commit()
-    con.close()
 
-#delete data function 
+    #messagebox for updated info
+    messagebox.showinfo('Info', "The data has been updated")
+
+    #makes all changes and ends a transaction in database
+    con.commit()
+
+    #close database
+    con.close()
+#========================================================================================================================================
+
+#==================================================== Delete function ===================================================================
+
+#delete Data function
 def delete_data():
 
+    #connect database
     con = sqlite3.connect(f'parcel_system_{month.get()}.db')
     c = con.cursor()
+
+    #execute selected data
     record_status = select_box.get().upper()
     c.execute("SELECT* FROM parcel_system WHERE trackno=" + f"'{record_status}'")
     records = c.fetchall()
 
-    delete = 0
+    response = 0
 
+    #delete data
     for record in records:
         if record[2] == record_status:
             msgBox = messagebox.askquestion('Delete', 'Confirm Delete?', icon = 'warning')
             if msgBox == 'yes':
-                delete = 1
+                response = 1
                 con = sqlite3.connect(f'parcel_system_{month.get()}.db')
                 c = con.cursor()
                 c.execute("DELETE from parcel_system WHERE trackno = " + f"'{record_status}'")
@@ -229,14 +299,16 @@ def delete_data():
                 messagebox.showinfo('Info', "The data has been deleted")
                 con.commit()
                 con.close()
-    
-    if delete == 0:
+
+    #if cancel delete
+    if response == 0:
         messagebox.showinfo('Info', "Delete has been canceled")
 
-#delete all data function 
+#delete all Data function
 def delete_all_data():
     response = messagebox.askyesno("DELETE ALL", "Are you sure to delete all the data? This operation cannot be undone", icon = 'warning')
 
+    #delete all data
     if response == 1:
         con = sqlite3.connect(f'parcel_system_{month.get()}.db')
         c = con.cursor()
@@ -244,16 +316,22 @@ def delete_all_data():
         messagebox.showinfo('Deleted', "All data has been deleted")
         con.commit()
         con.close()
+#========================================================================================================================================
 
-# data not found pop up
+#==================================================== data not found pop up =============================================================
 def data_notfound():
     messagebox.showinfo('Info', "Data Not Found")
+#========================================================================================================================================
 
-#Checking selected month
+#==================================================== Checking selected month ===========================================================
 def check_database(current_month, val):
+
+    #cannot proceed other function if not selected month
     if current_month == 'Select Month':
         messagebox.showinfo('Info', "You don't Selected Month!!")        
         print("You don't Selected Month")
+    
+    #if selected month, each function can be execute
     else:
         if val == 1:
             submit()
@@ -267,8 +345,9 @@ def check_database(current_month, val):
             delete_data()
         elif val == 6:
             delete_all_data()
+#========================================================================================================================================
 
-#frame 1 layout
+#==================================================== main frame layout =================================================================
 #label
 label_1 =Label(root, text = "Name:")
 label_1.grid(row = 0, column = 0, sticky = W, pady = 10, padx = 5)
@@ -276,14 +355,16 @@ label_2 =Label(root, text = "Phone Number:")
 label_2.grid(row = 1, column = 0, sticky = W, pady = 10, padx = 5)
 label_3 =Label(root, text = "Tracking Number:")
 label_3.grid(row = 2, column = 0, sticky = W, pady = 10, padx = 5)
+label_4 =Label(root, text = "Select Tracking No:")
+label_4.grid(row = 1, column = 2, sticky = W, pady = 10, padx = 5)
 label_5 =Label(root, text = "Rack Number:")
 label_5.grid(row = 3, column = 0, sticky = W, pady = 10, padx = 5)
 label_6 =Label(root, text = "Date:")
 label_6.grid(row = 4, column = 0, sticky = W, pady = 10, padx = 5)
-label_4 =Label(root, text = "Select Tracking No:")
-label_4.grid(row = 1, column = 2, sticky = W, pady = 10, padx = 5)
 label_7 =Label(root, text = "Status:")
 label_7.grid(row = 5, column = 0, sticky = W, pady = 10, padx = 5)
+label_8 =Label(root, text = "Month:")
+label_8.grid(row = 0, column = 2, sticky = W, pady = 10, padx = 5)
 
 #entry
 name_id =Entry(root)
@@ -336,5 +417,7 @@ delete_all_button.grid(row=4, column=4, pady=10, padx=10, ipadx=22)
 month = ttk.Combobox(root, value=["Select Month", 'Jan', 'Feb', 'Mac', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Spt', 'Oct', 'Nov', 'Dec'])
 month.current(0)
 month.grid(row = 0, column= 3)
+#========================================================================================================================================
 
+#GUI process will remain open until user close the window
 root.mainloop()
